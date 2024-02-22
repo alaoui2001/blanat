@@ -18,43 +18,86 @@ class Product {
     public Product(String name, double price) {
         this.name = name;
         this.price = price;
-        this.bool = true;
-
-        for (int i = 0; i < cheapest5product.size(); i++) {
-            if (cheapest5product.get(i).name.equals(this.name)) {
-            	if( cheapest5product.get(i).price > this.price) {
-            		 cheapest5product.get(i).price = this.price;
-            		  break;
-            	}
+        
+        if(cheapest5product.size()==0) {
+        	cheapest5product.add(this);
+        	
+        }
+        else {
+            int count=cheapest5product.size();
+            for (int i =count -1; i >=0 ; i--) {
+            	Product p=cheapest5product.get(i);
+            
+                    if( p.price > this.price) {
+                    	cheapest5product.remove(this);
+                    	cheapest5product.add(i,this);
+                    	
+                    }
+                    else if(p.price == this.price){
+                    	if(p.name.compareTo(this.name)>0) {
+                    		cheapest5product.remove(this);
+                    		cheapest5product.add(i,this);
+                    	}
+                    	else
+                     		break;
+                    }
+                    else
+                    	break;
+                  
                
-                this.bool = false;
-              
             }
-        }
 
-        if (this.bool) {
-            cheapest5product.add(this);
-            Collections.sort(cheapest5product, (p1, p2) -> {
-                if (p1.price == p2.price) {
-                    return p1.name.compareTo(p2.name);
+         
+
+                if ( cheapest5product.size() > 5) {
+                    cheapest5product.remove(5);
                 }
-                return Double.compare(p1.price, p2.price);
-            });
-
-            if (this.bool && cheapest5product.size() > 5) {
-                cheapest5product.remove(5);
-            }
         }
+}
+        
+    public void setprice(double price) {
+    	if(price>this.price)
+    		return;
+    	this.price=price;
+    	 int count=cheapest5product.size();
+         for (int i =count -1; i >=0 ; i--) {
+         	Product p=cheapest5product.get(i);
+         
+                 if( p.price > this.price) {
+                 	cheapest5product.remove(this);
+                 	cheapest5product.add(i,this);
+                 	
+                 }
+                 else if(p.price == this.price){
+                 	if(p.name.compareTo(this.name)>0) {
+                 		cheapest5product.remove(this);
+                 		cheapest5product.add(i,this);
+                 	}
+                 	else
+                 		break;
+                 }
+                 else
+                 	break;
+
+     }
+         if ( cheapest5product.size() > 5) {
+             cheapest5product.remove(5);
+         }
     }
 }
 
 class City {
     String name;
     double totaleprice;
-
+    static City cheapestcity;
     public City(String name, double totaleprice) {
         this.name = name;
         this.totaleprice = totaleprice;
+
+    }
+    public void setTotalprice(double price) {
+    	this.totaleprice+=price;
+    	
     }
 }
 
@@ -65,17 +108,30 @@ public class handleprob {
 
     public static void handleProb(String filename) {
         Map<String, City> cities = new HashMap<>();
+        Map<String, Product> products = new HashMap<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             int i=1;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                Product product = new Product(parts[1], Double.parseDouble(parts[2]));
-
-                cities.computeIfAbsent(parts[0], k -> new City(parts[0], Double.parseDouble(parts[2])));
-                cities.get(parts[0]).totaleprice += Double.parseDouble(parts[2]);
+             
+                if(!products.containsKey(parts[1])) 
+                	products.put(parts[1],new Product(parts[1], Double.parseDouble(parts[2])) );
+                else 
+                	    products.get(parts[1]).setprice(Double.parseDouble(parts[2]));
+                
+                
+               
+                if(!cities.containsKey(parts[0])) 
+                	cities.put(parts[0], new City(parts[0], Double.parseDouble(parts[2]) ));
+                else
+                cities.get(parts[0]).setTotalprice(Double.parseDouble(parts[2]));
                 i++;
+                if(i%10000000==0) {
+                	System.out.println(i);
+             
+                }
              
             }
 
