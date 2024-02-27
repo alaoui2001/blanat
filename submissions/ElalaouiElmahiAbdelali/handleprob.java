@@ -28,7 +28,7 @@ class Product {
             int count=cheapest5product.size();
             for (int i =count -1; i >=0 ; i--) {
             	Product p=cheapest5product.get(i);
-            	
+            
                     if( p.price > this.price) {
                     	cheapest5product.remove(this);
                     	cheapest5product.add(i,this);
@@ -78,7 +78,8 @@ class Product {
 }
         
     public void setprice(double price) {
-    	
+    	if(this.price<price)
+    		return;
     	this.price=price;
     	 int count=cheapest5product.size();
     	 boolean b=false;
@@ -88,14 +89,14 @@ class Product {
                  if( p.price > this.price) {
                 	cheapest5product.remove(this);
                  	cheapest5product.add(i,this);
-                 	b=true;
+                 	
                  	
                  }
                  else if(p.price == this.price){
                  	if(p.name.compareTo(this.name)>0) {
                  		cheapest5product.remove(this);
                  		cheapest5product.add(i,this);
-                 		b=true;
+                 		
                  	}
                 	else {
                 		try {
@@ -108,7 +109,7 @@ class Product {
                 			
           
                 		}
-                		b=true;
+                		
                 		break;
                 	}
                  	
@@ -121,11 +122,7 @@ class Product {
          if ( cheapest5product.size() > 5) {
              cheapest5product.remove(5);
          }
-         else if(!b && count<5) {
-       	   cheapest5product.remove(this);
-       	   cheapest5product.add(this);
-       	   
-           }
+        
         
     }
 }
@@ -147,7 +144,7 @@ class City {
 
 public class handleprob {
     public static void main(String[] args) {
-        handleProb("C:\\Users\\ServerDB\\eclipse-workspace\\projprob\\input.txt");
+        handleProb("C:\\Users\\ServerDB\\Desktop\\project\\input.txt");
     }
 
     public static void handleProb(String filename) {
