@@ -24,23 +24,40 @@ class Product {
         	
         }
         else {
+        	boolean b=false;
             int count=cheapest5product.size();
             for (int i =count -1; i >=0 ; i--) {
             	Product p=cheapest5product.get(i);
-            
+            	
                     if( p.price > this.price) {
                     	cheapest5product.remove(this);
                     	cheapest5product.add(i,this);
+                    	b=true;
                     	
                     }
+                   
                     else if(p.price == this.price){
                     	if(p.name.compareTo(this.name)>0) {
                     		cheapest5product.remove(this);
                     		cheapest5product.add(i,this);
+                    		b=true;
                     	}
-                    	else
-                     		break;
+                    	else {
+                    		try {
+                    			cheapest5product.remove(this);
+                        		cheapest5product.add(i+1,this);
+                    		}
+                    		catch(IndexOutOfBoundsException e) {
+                    			cheapest5product.add(i,this);
+                    			
+              
+                    		}
+                    		b=true;
+                    		break;
+                    	}
+                    	
                     }
+                 
                     else
                     	break;
                   
@@ -52,30 +69,51 @@ class Product {
                 if ( cheapest5product.size() > 5) {
                     cheapest5product.remove(5);
                 }
+                else if(!b && count<5) {
+             	   cheapest5product.remove(this);
+             	   cheapest5product.add(this);
+             	   
+                 }
         }
 }
         
     public void setprice(double price) {
-    	if(price>this.price)
-    		return;
+    	
     	this.price=price;
     	 int count=cheapest5product.size();
+    	 boolean b=false;
          for (int i =count -1; i >=0 ; i--) {
          	Product p=cheapest5product.get(i);
-         
+       
                  if( p.price > this.price) {
-                 	cheapest5product.remove(this);
+                	cheapest5product.remove(this);
                  	cheapest5product.add(i,this);
+                 	b=true;
                  	
                  }
                  else if(p.price == this.price){
                  	if(p.name.compareTo(this.name)>0) {
                  		cheapest5product.remove(this);
                  		cheapest5product.add(i,this);
+                 		b=true;
                  	}
-                 	else
-                 		break;
+                	else {
+                		try {
+                			cheapest5product.remove(this);
+                    		cheapest5product.add(i+1,this);
+                    		
+                		}
+                		catch(IndexOutOfBoundsException e) {
+                			cheapest5product.add(i,this);
+                			
+          
+                		}
+                		b=true;
+                		break;
+                	}
+                 	
                  }
+              
                  else
                  	break;
 
@@ -83,6 +121,12 @@ class Product {
          if ( cheapest5product.size() > 5) {
              cheapest5product.remove(5);
          }
+         else if(!b && count<5) {
+       	   cheapest5product.remove(this);
+       	   cheapest5product.add(this);
+       	   
+           }
+        
     }
 }
 
@@ -103,7 +147,7 @@ class City {
 
 public class handleprob {
     public static void main(String[] args) {
-        handleProb("C:\\Users\\ServerDB\\Desktop\\project\\input.txt");
+        handleProb("C:\\Users\\ServerDB\\eclipse-workspace\\projprob\\input.txt");
     }
 
     public static void handleProb(String filename) {
